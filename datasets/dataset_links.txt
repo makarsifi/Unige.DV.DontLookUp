@@ -1,0 +1,79 @@
+https://ec.europa.eu/eurostat/web/climate-change/data/database
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Drivers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> add title when changing category and year (e.g. energy consumption in 2019...)
+example link
+https://medium.datadriveninvestor.com/getting-started-with-d3-js-maps-e721ba6d8560
+
+Category = Energy
+Title = Primary energy consumption
+Url = https://ec.europa.eu/eurostat/databrowser/view/sdg_07_10/default/table?lang=en
+Filename = sdg_07_10_linear.csv
+**filter by unit=MTOE (Million tonnes of oil equivalent)
+0.8 < OBS_VALUE < 317.1
+
+Category = Transport
+Title = Final energy consumption in transport by type of fuel (not individual cars but cargo and airplanes transport)
+Url = https://ec.europa.eu/eurostat/databrowser/view/ten00126/default/table?lang=en
+Filename = ten00126_linear.csv
+unit=KTOE (Kilo tonnes of oil equivalent)
+**filter by siec=TOTAL
+169.39 < OBS_VALUE < 52532.628
+
+Category = Waste
+Title = Municipal waste by waste management operations
+Url = https://ec.europa.eu/eurostat/databrowser/view/env_wasmun/default/table?lang=en
+Filename = env_wasmun_linear.csv
+**filter by unit=KG_HAB (Kilograms per capita)
+**filter by wst_oper=GEN
+
+
+Category = Agriculture:
+Title = Sales of fertilisers by type of nutrient
+Url = https://ec.europa.eu/eurostat/databrowser/view/tai01/default/map?lang=en
+Filename = tai01_linear.csv
+unit=T (Tonne)
+**filter by nutrient=N
+1000 < OBS_VALUE < 356000 X
+
+choose this year interval for all categories: 2000-2020
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Mitigations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Title = Solar thermal collectors' surface
+Url = https://ec.europa.eu/eurostat/databrowser/view/nrg_inf_stcs/default/table?lang=en
+Filename = data solar thermal.csv
+unit=Thousand square metres (THS M2)
+
+
+Title = Supply, transformation and consumption of renewables and wastes
+Url = https://ec.europa.eu/eurostat/databrowser/view/nrg_cb_rw/default/bar?lang=en
+Filename = data renewable waste.csv
+unit=TJ (Terajoule)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Impact
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Title = Mean near surface temperature deviation
+Url = https://ec.europa.eu/eurostat/databrowser/view/cli_iad_td/default/table?lang=en
+Filename = cli_iad_td_linear.csv
+unit=Degree Celcius
+frequency=Annual
+3 different sources to be displayed:
+    HadCRUT4 (by Met Office Hadley Centre and Climatic Research Unit) 
+    GISTEMP (by NASA Goddard Institute for Space Studies) 
+    NOAAGlobalTemp (by National Oceanic and Atmospheric Administration) 
+Graph used=Multiline chart (https://observablehq.com/@d3/multi-line-chart)
+
+
+Title = Global mean ocean surface acidity
+Url = https://ec.europa.eu/eurostat/databrowser/view/sdg_14_50/default/bar?lang=en
+Filename = sdg_14_50_linear.csv
+unit=pH
+Graph= line with curveStep to emphasize on the decrease of the acidity value

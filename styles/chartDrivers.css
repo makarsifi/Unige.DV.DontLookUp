@@ -1,0 +1,83 @@
+.mapcontainer {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.category-icon-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+    background-position: center;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    border: black solid 2px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.category-icon:hover,
+.category-icon.category-icon-selected {
+    background-color: #ffffa9;
+}
+
+#Energy {
+    background-image: url(/images/light-bulb.png);
+}
+
+#Transport {
+    background-image: url(/images/transportation.png);
+}
+
+#Waste {
+    background-image: url(/images/bin.png);
+}
+
+#Agriculture {
+    background-image: url(/images/fertilizer.png);
+}
+
+.slider-year svg {
+    width: 150;
+    height: 450;
+    transform: translate(90, 30);
+}
+
+.maplegend {
+    font-size: 12px;
+}
+
+.maptooltip {
+    opacity: 0;
+    position: absolute;
+    /* width: 120px; */
+    background-color: darkslategray;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px;
+    z-index: 1;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.maptooltip::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent darkslategray transparent transparent;
+}
+
+.maptooltip-country {
+    font-weight: bold;
+}

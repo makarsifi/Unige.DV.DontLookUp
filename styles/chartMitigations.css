@@ -1,0 +1,42 @@
+.mitigation-race-title {
+    font-size: 12px;
+}
+
+.mitigation-race-label {
+    font-size: 10px;
+}
+
+.mitigation-race-value {
+    font-size: 12px;
+}
+
+.mitigation-race-year {
+    font-size: 34px;
+    font-weight: 700;
+    opacity: 0.25;
+}
+
+#mitigation-solar path.domain {
+    display: none;
+}
+
+.mitigation-race-container {
+    position: relative;
+    width: 100%;
+}
+
+.mitigation-race-replay {
+    position: absolute;
+    right: 15%;
+}
+
+.chart-waste-legend {
+    width: 40%;
+}
+
+.chart-waste-pie {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+}

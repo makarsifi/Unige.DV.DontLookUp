@@ -1,0 +1,14 @@
+.impact-axis-title {
+    fill: currentColor;
+    text-anchor: start;
+}
+
+.impact-pointerdot {
+    font-size: 10px;
+    text-anchor: middle;
+}
+
+.impact-temp-legend {
+    fill: currentColor;
+    font-size: 8px;
+}

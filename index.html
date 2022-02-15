@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/chartDrivers.css">
+    <link rel="stylesheet" href="/styles/chartImpacts.css">
+    <link rel="stylesheet" href="/styles/chartMitigations.css">
+
+    <script src="/scripts/jquery-3.6.0.js"></script>
+    <script src="/scripts/d3.js"></script>
+
+    <!--  map libraries -->
+    <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+</head>
+
+<body>
+
+    <div class="parallax bgimg-1">
+        <div class="caption caption-title">
+            <span class="border">Don't scroll down</span>
+        </div>
+    </div>
+
+    <div class="container container-dark">
+        <p>Climate change was first discovered in 1896</p>
+    </div>
+
+    <div class="parallax bgimg-2">
+    </div>
+
+    <div class="container container-dark">
+        <p>Early signs were: rising in world-wide temperature, increase in droughts and tropical storms becoming more severe</p>
+    </div>
+
+    <div class="parallax bgimg-3">
+    </div>
+
+    <div class="container container-column">
+        <h3>
+            Drivers responsible for climate change are Energy Consumption, Transportation Emmissions, Lack of Waste Managment, Agriculture Fertilizers. <br/> Choose a driver category from the icons on the right and drag the year slide on the left to see
+            the effect of those drivers in Europe.
+        </h3>
+        <div class="mapcontainer">
+            <div id="slider-year"></div>
+            <div class="maptooltip">
+                <div class="maptooltip-country"></div>
+                <div class="maptooltip-data"></div>
+            </div>
+            <svg id="map"></svg>
+            <div class="category-icon-container">
+                <input type="hidden" id="selectedCategory" value="Energy" />
+                <div class="category-icon category-icon-selected" id="Energy" title="Energy Consumption"></div>
+                <div class="category-icon" id="Transport" title="Transportation Emmissions"></div>
+                <div class="category-icon" id="Waste" title="Lack of Waste Managment"></div>
+                <div class="category-icon" id="Agriculture" title="Agriculture Fertilizers"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="parallax bgimg-4">
+    </div>
+
+    <div class="container container-dark">
+        <p>Many intiatives took place especially in Europe to combat the climate change</p>
+    </div>
+
+    <div class="parallax bgimg-5">
+    </div>
+
+    <div class="container container-column">
+        <h3>Countries started adopting solar thermal panels to produce heat and electricity which is a cost efficient and renewable source of energy
+            <br/> Below is a barchart race representing european countries usage of solar thermal collectors over the years in terms of surface coverage
+            <br/><i>Values are in Thousand square metres (THS M<sup>2</sup>) </i>
+        </h3>
+        <div class="mitigation-race-container">
+            <button class="btn btn-dark mitigation-race-replay" onclick="StartBarChartRace()">Replay</button>
+            <svg id="mitigation-solar"></svg>
+        </div>
+    </div>
+
+    <div class="parallax bgimg-6">
+    </div>
+
+    <div class="container">
+        <div class="chart-waste-legend">
+            <h3>
+                Another type of mitigation used by european countries is the supply, transformation and consumption of renewables and wastes
+                <br/><br/> In this pie chart we see the amount of energy produced by each country from the consumption of renewabales and wastes
+            </h3>
+        </div>
+        <div class="chart-waste-pie">
+            <svg id="mitigation-waste"></svg>
+            <div id="slider-year-waste"></div>
+        </div>
+    </div>
+
+    <div class="parallax bgimg-7">
+    </div>
+
+    <div class="container container-dark">
+        <p>Climate change poses a long-term threat to human beings and all other forms of life on Earth</p>
+    </div>
+
+    <div class="parallax bgimg-8">
+    </div>
+
+    <div class="container container-column">
+        <h3>
+            Below are two examples of how climate change impacts the life on planet Earth: (on the left) global temperature deviation is increasing from year to year, (on the right) ocean water acidity has increased significantly over the last three decades
+        </h3>
+        <div class="double-chart">
+            <div>
+                <svg id="impact-temperature"></svg>
+            </div>
+            <div>
+                <svg id="impact-oceanacidity"></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="parallax bgimg-9">
+        <div class="caption">
+            <span class="border">Climate change will not be taken seriously until the media highlights its significance</span>
+        </div>
+    </div>
+
+    <script src="/scripts/chartDrivers.js"></script>
+    <script src="/scripts/chartImpacts.js"></script>
+    <script src="/scripts/chartMitigations.js"></script>
+</body>
+
+</html>
