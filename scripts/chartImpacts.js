@@ -13,10 +13,10 @@ function drawChartTemperatureDeviation(data) {
     // Data values
     const X = d3.map(data, d => parseInt(d.TIME_PERIOD));
     const Y = d3.map(data, d => parseFloat(d.OBS_VALUE));
-    const Z = d3.map(data, d => d.source);
+    const Z = d3.map(data, d => d.source); // 3 sources
 
     // Data domains
-    var xDomain = d3.extent(X); // [min, max]
+    var xDomain = d3.extent(X); // [min, max] --> [1860, 2020]
     var yDomain = [-0.3, 1.3];
     const zDomain = Array.from(new Set(Z)); // 3 unique values of Z (source), used to determine the line colors
     const I = d3.range(X.length); //all indexes
@@ -67,6 +67,7 @@ function drawChartTemperatureDeviation(data) {
             .html("Temperature deviation (&#8451;)"));
 
     var colorArray = ["#7e83e4", "#ee6866", "#9acd32"];
+    //draw the lines
     const path = svg.append("g")
         .attr("fill", "none")
         .attr("stroke-width", 1.5)

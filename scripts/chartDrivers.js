@@ -1,21 +1,30 @@
-var drivers = new Map();
-drivers.set("Energy", { filename: "sdg_07_10_linear.csv", unit: "MTOE", datamap: new Map() });
-drivers.set("Transport", { filename: "ten00126_linear.csv", unit: "KTOE", datamap: new Map() });
-drivers.set("Waste", { filename: "env_wasmun_linear.csv", unit: "Kg", datamap: new Map() });
-drivers.set("Agriculture", { filename: "tai01_linear.csv", unit: "T", datamap: new Map() });
+//var drivers is to keep track of all the csv file names, unit of measure and data 
+//for different causes of climate change 
+var drivers = new Map(); //list of key and values
+drivers.set("Energy", { filename: "sdg_07_10_linear.csv", title: "Energy consumption", unit: "MTOE", datamap: new Map() });
+drivers.set("Transport", { filename: "ten00126_linear.csv", title: "Transportation emmissions", unit: "KTOE", datamap: new Map() });
+drivers.set("Waste", { filename: "env_wasmun_linear.csv", title: "Waste per capita", unit: "Kg", datamap: new Map() });
+drivers.set("Agriculture", { filename: "tai01_linear.csv", title: "Agriculture fertilizers usage", unit: "T", datamap: new Map() });
 
 var mapColorScale;
 var displayUnit;
 
+// convert scales of each dataset into percentages to normalize the data
 function mapToPercentage(value, in_min, in_max) {
     value = parseFloat(value);
     return (value - in_min) * 100 / (in_max - in_min);
 }
 
+//Promises are data types in javascript that are used to define async functions
+//Here we create an array that will contain functions, then we call all those functions at once using Promise.all()
+//We need to wait for all readings to finish before start building the map
 var promises = []
+
+//read the countries borders
 promises.push(d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"));
 
-// Mapping between alpha2 and alpha3 country names
+// Build the countries array that contains mapping between alpha2 and alpha3 country names
+// because d3 map works with alpha3 names whereas our data has alpha2 names
 var countries = [];
 promises.push(d3.csv("/datasets/countries.csv", function(row) {
     countries.push({
@@ -26,13 +35,14 @@ promises.push(d3.csv("/datasets/countries.csv", function(row) {
     });
 }));
 
+// adding promise functions to read the csv data
 var resolveEnergy, resolveTransport, resolveWaste, resolveAgriculture;
 promises.push(new Promise((resolve, reject) => { resolveEnergy = resolve; }));
 promises.push(new Promise((resolve, reject) => { resolveTransport = resolve; }));
 promises.push(new Promise((resolve, reject) => { resolveWaste = resolve; }));
 promises.push(new Promise((resolve, reject) => { resolveAgriculture = resolve; }));
 
-// reading the data
+// reading the csv data
 drivers.forEach(function(value, key) {
     d3.csv("/datasets/" + value.filename).then(function(data) {
         // Filter out all records countries not listed in countries.csv (for example we may have EU...)
@@ -57,13 +67,17 @@ drivers.forEach(function(value, key) {
                 resolveCallback = resolveAgriculture;
                 break;
         }
-        var obsValues = data.map(d => parseFloat(d.OBS_VALUE));
+
+        //mapping from big scale to %
+        var obsValues = data.map(d => parseFloat(d.OBS_VALUE)); //data.map goes over each record and execute something
         var minOBS = d3.min(obsValues);
         var maxOBS = d3.max(obsValues);
 
         var currentdriver = drivers.get(key);
-        var datamap = currentdriver.datamap;
+        var datamap = currentdriver.datamap; //retrieving the variable that will hold the obs values for each country
         data.forEach(row => {
+            //data contains raw record from the csv file
+            //this record contains alpha2 country we need to map it to alpha3
             let alpha3 = countries.filter(c => c.alpha2 == row.geo)[0].alpha3;
             let countryDataArray = datamap.get(alpha3);
             if (!countryDataArray)
@@ -71,8 +85,8 @@ drivers.forEach(function(value, key) {
 
             countryDataArray.push({
                 year: parseInt(row.TIME_PERIOD),
-                obs: parseFloat(row.OBS_VALUE),
-                obsPercentage: mapToPercentage(row.OBS_VALUE, minOBS, maxOBS)
+                obs: parseFloat(row.OBS_VALUE), // real obs value
+                obsPercentage: mapToPercentage(row.OBS_VALUE, minOBS, maxOBS) //obs value converted to %
             });
 
             datamap.set(alpha3, countryDataArray);
@@ -86,21 +100,22 @@ drivers.forEach(function(value, key) {
 });
 
 
-//// Filters
-// Category icons
+//// Define the html components that does the filtering
+// Retrieve the selected Category
 var selectedCat = $("#selectedCategory");
-// Step slider
+// Define Step slider object
 var sliderStep = d3.sliderLeft()
     .min(2000)
     .max(2020)
     .height(400)
-    .tickFormat(d3.format(''))
+    .tickFormat(d3.format('')) //to remove decimals
     .ticks(20)
     .step(1)
     .on('onchange', val => {
         changeFilters(selectedCat.val(), sliderStep.value())
     });
 
+// add step slider object to html
 var gStep = d3
     .select('#slider-year')
     .append('svg')
@@ -117,8 +132,8 @@ Promise.all(promises).then(function(fullfilled) {
 
 function drawChartDrivers(topo) {
     // use svg inside viewbox
-    var wsvg = 80,
-        hsvg = 100,
+    var wsvg = 100, // %
+        hsvg = 95, // %
         wtot = 800,
         htot = 400;
 
@@ -138,7 +153,7 @@ function drawChartDrivers(topo) {
     // Map and projection on europe
     var projection = d3.geoMercator()
         .scale(400)
-        .center([0, 53])
+        .center([0, 53]) //coordinates where we need to center
         .translate([width / 2 - margin.left, height / 2]);
 
 
@@ -150,8 +165,10 @@ function drawChartDrivers(topo) {
         .domain(domain)
         .range(range);
 
+    //the blue box containing values on hover
     var tooltip = d3.select(".maptooltip");
 
+    //on hover show the data inside the blue box
     let mouseOver = function(event, d) {
         d3.selectAll(".topo")
             .transition()
@@ -179,6 +196,7 @@ function drawChartDrivers(topo) {
             .html(htmlValue)
     }
 
+    //hide the box when leaving the map
     let mouseLeave = function(d) {
         d3.selectAll(".topo")
             .transition()
@@ -191,11 +209,11 @@ function drawChartDrivers(topo) {
     // Draw the map
     svg.append("g")
         .selectAll("path")
-        .data(topo.features)
+        .data(topo.features) //map the countries' borders to the svg canvas to draw the map
         .enter()
         .append("path")
         .attr("class", "topo")
-        .style("stroke", "black")
+        .style("stroke", "black") //borders color
         .attr("d", d3.geoPath().projection(projection))
         .on("mouseover", mouseOver)
         .on("mouseleave", mouseLeave);
@@ -228,9 +246,11 @@ function changeFilters(category, year) {
             return mapColorScale(-1);
         });
 
-    displayUnit = drivers.get(category).unit;
+    var selectedDriver = drivers.get(category);
+    displayUnit = selectedDriver.unit;
 
-
+    d3.select("#maptitle")
+        .html(`${selectedDriver.title} in ${year}`);
 }
 
 $(".category-icon").click(function() {
@@ -242,6 +262,8 @@ $(".category-icon").click(function() {
 });
 
 
+
+// e.g. For Energy, 2001, Albania return the obs value and %
 function getDataMapRecord(category, year, country) {
     var datamap = drivers.get(category).datamap;
     var countryDataArray = datamap.get(country);

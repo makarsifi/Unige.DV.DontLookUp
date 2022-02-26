@@ -12,7 +12,7 @@ Title = Primary energy consumption
 Url = https://ec.europa.eu/eurostat/databrowser/view/sdg_07_10/default/table?lang=en
 Filename = sdg_07_10_linear.csv
 **filter by unit=MTOE (Million tonnes of oil equivalent)
-0.8 < OBS_VALUE < 317.1
+0.8 < OBS_VALUE < 317.1 
 
 Category = Transport
 Title = Final energy consumption in transport by type of fuel (not individual cars but cargo and airplanes transport)
@@ -49,7 +49,6 @@ Title = Solar thermal collectors' surface
 Url = https://ec.europa.eu/eurostat/databrowser/view/nrg_inf_stcs/default/table?lang=en
 Filename = data solar thermal.csv
 unit=Thousand square metres (THS M2)
-
 
 Title = Supply, transformation and consumption of renewables and wastes
 Url = https://ec.europa.eu/eurostat/databrowser/view/nrg_cb_rw/default/bar?lang=en

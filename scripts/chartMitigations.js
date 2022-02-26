@@ -1,5 +1,9 @@
+///////////////////////
+// BARCHART RACE
+///////////////////////
 var barchartTicker;
 
+// we define a function that draws the barchart race
 function drawChartSolarCollectorSurface(data) {
     // use svg inside viewbox
     var wsvg = 100,
@@ -14,12 +18,13 @@ function drawChartSolarCollectorSurface(data) {
 
     const top_n = 10; // number of top countries to show
 
-    const tickDuration = 1000; //delay of an animation
+    const tickDuration = 1000; //speed of an animation
     const delayDuration = 2000; //delay between two years
 
     const yearStart = 1990;
     const yearEnd = 2019;
 
+    //drawing the canvas (width+height+viewbox)
     const svg = d3.select("#mitigation-solar")
         .attr("width", wsvg + "%")
         .attr("height", hsvg + "%")
@@ -27,6 +32,8 @@ function drawChartSolarCollectorSurface(data) {
 
     const barPadding = (height - (margin.bottom + margin.top)) / (top_n * 5);
 
+
+    //Adding the title of the chart
     svg.append('text')
         .attr('class', 'mitigation-race-title')
         .attr('x', 60)
@@ -72,10 +79,13 @@ function drawChartSolarCollectorSurface(data) {
 
     yearSlice.forEach((d, i) => d.rank = i);
 
+
+    // year axis
     let x = d3.scaleLinear()
         .domain([0, d3.max(yearSlice, d => d.value)])
         .range([margin.left, width - margin.right - 65]);
 
+    // countries axis
     let y = d3.scaleLinear()
         .domain([top_n, 0])
         .range([height - margin.bottom, margin.top]);
@@ -93,17 +103,20 @@ function drawChartSolarCollectorSurface(data) {
         .selectAll('.tick line')
         .classed('origin', d => d == 0);
 
+
+    //bars setup
     svg.selectAll('rect.bar')
         .data(yearSlice, d => d.name)
         .enter()
         .append('rect')
         .attr('class', 'bar')
         .attr('x', x(0) + 1)
-        .attr('width', d => x(d.lastValue) - x(0))
+        .attr('width', d => x(d.lastValue) - x(0)) // this is where we set the width of each bar
         .attr('y', d => y(d.rank) + 5)
         .attr('height', y(1) - y(0) - barPadding)
         .style('fill', d => d.colour);
 
+    //country names setup
     svg.selectAll('.mitigation-race-label')
         .data(yearSlice, d => d.name)
         .enter()
@@ -114,6 +127,7 @@ function drawChartSolarCollectorSurface(data) {
         .style('text-anchor', 'end')
         .html(d => d.name);
 
+    //country values setup
     svg.selectAll('.mitigation-race-value')
         .data(yearSlice, d => d.name)
         .enter()
@@ -123,6 +137,7 @@ function drawChartSolarCollectorSurface(data) {
         .attr('y', d => y(d.rank) + 5 + ((y(1) - y(0)) / 2) + 1)
         .text(d => d.lastValue);
 
+    // big year label on the bottom right
     let yearText = svg.append('text')
         .attr('class', 'mitigation-race-year')
         .attr('x', width - margin.right)
@@ -246,9 +261,12 @@ function drawChartSolarCollectorSurface(data) {
         if (year > yearEnd) barchartTicker.stop();
     };
 
+    //d3.interval calls the tickerMethod every 2 seconds
     barchartTicker = d3.interval(tickerMethod, delayDuration);
 }
 
+// function to call the barchart race because we have a replay button
+// we need to redraw it every time the user clicks it
 function StartBarChartRace() {
     $('#mitigation-solar').html('');
     if (barchartTicker) barchartTicker.stop();
@@ -256,8 +274,15 @@ function StartBarChartRace() {
         drawChartSolarCollectorSurface(data);
     });
 }
+
+// Start the race whenever we load the webpage
 StartBarChartRace();
 
+
+
+///////////////////////
+// PIE CHART
+///////////////////////
 // Step slider
 var sliderStepWaste = d3.sliderLeft()
     .min(1990)
@@ -279,6 +304,7 @@ var gStep = d3
     .call(sliderStepWaste);
 
 function drawChartRenewableWaste() {
+    //read the year and filter data by this year
     data = wasteData.get(sliderStepWaste.value())
 
     // use svg inside viewbox
@@ -292,29 +318,29 @@ function drawChartRenewableWaste() {
         width = wtot - margin.left - margin.right,
         height = htot - margin.top - margin.bottom;
 
+    // draw canvas
     const svg = d3.select("#mitigation-waste")
         .attr("width", wsvg + "%")
         .attr("height", hsvg + "%")
         .attr("viewBox", [-width / 2, -height / 2, wtot, htot])
 
     // Compute values.
-    const N = d3.map(data, d => d.geo);
-    const V = d3.map(data, d => parseFloat(d.OBS_VALUE));
-    const I = d3.range(N.length);
+    const N = d3.map(data, d => d.geo); // list of countries e.g. [Turkey, Italy, Alb, Germany]
+    const V = d3.map(data, d => parseFloat(d.OBS_VALUE)); // list of values for each country
+    const I = d3.range(N.length); // array of indexes with the same size of the countries array e.g.[0 ,1 ,2,3]
 
     var names = new d3.InternSet(N);
 
-    // Chose a default color scheme based on cardinality.
+    // Generate a different color based on the number of countries
     var colors = d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), names.size);
-
-    // Construct scales.
+    // maps the colors to each country
     const color = d3.scaleOrdinal(names, colors);
 
-    // Compute titles.
+    // Compute titles+values
     const formatValue = d3.format(",");
     var title = i => `${N[i]}\n${formatValue(V[i])} TJ`;
 
-    // Construct arcs.
+    // Construct arcs for each country
     var innerRadius = 0;
     var outerRadius = Math.min(width, height) / 2;
     var labelRadius = (innerRadius * 0.2 + outerRadius * 0.8);
@@ -324,18 +350,20 @@ function drawChartRenewableWaste() {
     const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
+    //assign the angles and colors to the svg canvas
     svg.append("g")
         .attr("stroke", "white")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
         .selectAll("path")
-        .data(arcs)
+        .data(arcs) // contains a list of angles (degrees) for each country
         .join("path")
         .attr("fill", d => color(N[d.data]))
         .attr("d", arc)
         .append("title")
         .text(d => title(d.data));
 
+    //assign the title to the svg canvas
     svg.append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
