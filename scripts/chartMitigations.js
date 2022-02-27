@@ -38,7 +38,7 @@ function drawChartSolarCollectorSurface(data) {
         .attr('class', 'mitigation-race-title')
         .attr('x', 60)
         .attr('y', 20)
-        .html(`Solar thermal collectors' surface (${yearStart}-${yearEnd})`);
+        .html(`Top ${top_n} countries with solar panels installed from ${yearStart}-${yearEnd}`);
 
     let year = yearStart;
 

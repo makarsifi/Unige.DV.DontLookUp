@@ -2,7 +2,7 @@
 //for different causes of climate change 
 var drivers = new Map(); //list of key and values
 drivers.set("Energy", { filename: "sdg_07_10_linear.csv", title: "Energy consumption", unit: "MTOE", datamap: new Map() });
-drivers.set("Transport", { filename: "ten00126_linear.csv", title: "Transportation emmissions", unit: "KTOE", datamap: new Map() });
+drivers.set("Transport", { filename: "ten00126_linear.csv", title: "Transportation emissions", unit: "KTOE", datamap: new Map() });
 drivers.set("Waste", { filename: "env_wasmun_linear.csv", title: "Waste per capita", unit: "Kg", datamap: new Map() });
 drivers.set("Agriculture", { filename: "tai01_linear.csv", title: "Agriculture fertilizers usage", unit: "T", datamap: new Map() });
 
